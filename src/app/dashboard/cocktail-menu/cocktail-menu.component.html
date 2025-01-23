@@ -1,0 +1,34 @@
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>menu_book</mat-icon>
+    <mat-card-title>Cocktail list</mat-card-title>
+    <mat-card-subtitle>have a drink</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-actions>
+    <button mat-button color="accent" (click)="getCategories()">
+      <mat-icon>local_bar</mat-icon>Get categories
+    </button>
+  </mat-card-actions>
+  <mat-card-content>
+    <div>
+      @for (category of categories(); track $index) {
+      <button mat-button color="accent" (click)="getCocktails(category)">
+        <mat-icon>liquor</mat-icon> {{ category.name }}
+      </button>
+      }
+    </div>
+
+    @if(isLoading()) {
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    }
+    
+    @if(cocktails().length){
+    <div>
+      <app-cocktail-list
+        [cocktails]="cocktails()"
+        [title]="currentSection()"
+      ></app-cocktail-list>
+    </div>
+    }
+  </mat-card-content>
+</mat-card>

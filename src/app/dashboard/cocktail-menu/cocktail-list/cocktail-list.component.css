@@ -1,0 +1,13 @@
+.drinks-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.drink-thumb{
+  height: 260px;
+}
+
+.drink-card{
+  width: 300px;
+  margin: 10px;
+}

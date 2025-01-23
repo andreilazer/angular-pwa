@@ -1,0 +1,24 @@
+<mat-card>
+  <mat-card-header>
+    <h2>{{ title() }}</h2>
+  </mat-card-header>
+  <mat-card-content class="drinks-container">
+    @for (drink of currentPage(); track $index) {
+    <mat-card class="drink-card">
+      <mat-card-header>
+        <h3>{{ drink.strDrink }}</h3>
+      </mat-card-header>
+      <mat-card-content>
+        <img [src]="drink.strDrinkThumb" class="drink-thumb" />
+      </mat-card-content>
+    </mat-card>
+    }
+  </mat-card-content>
+  <mat-card-footer>
+    <mat-paginator
+      [pageSize]="5"
+      [length]="cocktails().length"
+      (page)="page.set($event)"
+    ></mat-paginator>
+  </mat-card-footer>
+</mat-card>
