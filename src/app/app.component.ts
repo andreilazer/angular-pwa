@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { NetworkStateService } from './network-state.service';
 
 @Component({
   selector: 'app-root',
@@ -26,5 +27,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class AppComponent {
   private breakPointObserver = inject(BreakpointObserver);
+  networkState = inject(NetworkStateService);
   isHandset = toSignal(this.breakPointObserver.observe(Breakpoints.Handset).pipe(map(result => result.matches)), { requireSync: true });
 }

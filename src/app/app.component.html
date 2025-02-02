@@ -21,7 +21,10 @@
         (click)="drawer.toggle()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Angular PWA</span>
+      <span>
+        Angular PWA
+        <div class="dot" [ngClass]="networkState.online() ? 'green' : 'red'"></div>
+      </span>
     </mat-toolbar>
     
     <router-outlet></router-outlet>
