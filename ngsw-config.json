@@ -31,9 +31,39 @@
       "name": "icon-fonts",
       "installMode": "prefetch",
       "resources": {
-        "files": [
-          "/material-icons/**"
-          ]
+        "files": ["/material-icons/**"]
+      }
+    },
+    {
+      "name": "photos",
+      "installMode": "lazy",
+      "updateMode": "lazy",
+      "resources": {
+        "urls": [
+          "**/images/media/drink/**"
+        ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "api-performance",
+      "urls": ["/api/json/v1/1/list.php"],
+      "cacheConfig": {
+        "maxSize": 100,
+        "maxAge": "1d",
+        "timeout": "10s",
+        "strategy": "performance"
+      }
+    },
+    {
+      "name": "api-freshness",
+      "urls": ["/api/json/v1/1/filter.php"],
+      "cacheConfig": {
+        "maxSize": 100,
+        "maxAge": "10d",
+        "timeout": "5s",
+        "strategy": "freshness"
       }
     }
   ]
