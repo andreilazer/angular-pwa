@@ -25,6 +25,13 @@
         Angular PWA
         <div class="dot" [ngClass]="networkState.online() ? 'green' : 'red'"></div>
       </span>
+      <div class="actions">
+        @if(isInstallVisible){
+          <button (click)="install()" mat-raised-button class="install-button">
+            Install
+          </button>
+        }
+      </div>  
     </mat-toolbar>
     
     <router-outlet></router-outlet>
