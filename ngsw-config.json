@@ -66,5 +66,12 @@
         "strategy": "freshness"
       }
     }
+  ],
+  "navigationUrls": [
+    "/**",
+    "!/**/*.*",
+    "!/**/*__*",
+    "!/**/*__*/**",
+    "!/**/non-cached-route"
   ]
 }
