@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -11,6 +11,7 @@ import { map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NetworkStateService } from './network-state.service';
 import { WINDOW } from './window.service';
+import { UpdateService } from './update.service';
 
 @Component({
   selector: 'app-root',
@@ -26,8 +27,9 @@ import { WINDOW } from './window.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private breakPointObserver = inject(BreakpointObserver);
+  private updateService = inject(UpdateService);
   networkState = inject(NetworkStateService);
   isHandset = toSignal(this.breakPointObserver.observe(Breakpoints.Handset).pipe(map(result => result.matches)), { requireSync: true });
   
@@ -38,6 +40,10 @@ export class AppComponent {
 
   constructor() {
     this.prepareInstallButton();
+  }
+
+  ngOnInit(): void {
+    this.updateService.subscribeToUpdates(15);
   }
 
   private prepareInstallButton() {

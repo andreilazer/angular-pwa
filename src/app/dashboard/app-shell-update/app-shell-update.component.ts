@@ -1,9 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ApplicationRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
-// Import SwUpdate here
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
+import { WINDOW } from '../../window.service';
+import { concat, filter, first, interval, map, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-shell-update',
@@ -12,29 +15,68 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [MatIconModule, MatCardModule, MatButtonModule]
 })
 export class AppShellUpdateComponent implements OnInit {
-  public snackBar = inject(MatSnackBar);
+  private snackBar = inject(MatSnackBar);
+  private swUpdate = inject(SwUpdate);
+  private window = inject(WINDOW);
+  private appRef = inject(ApplicationRef);
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit() {
-    this.subscribeForUpdates();
   }
 
   subscribeForUpdates() {
-    // Code to subscribe for updates
+    this.swUpdate.versionUpdates.pipe(
+      filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'),
+      map(evt => ({
+        type: 'UPDATE_AVAILABLE',
+        current: evt.currentVersion,
+        available: evt.latestVersion,
+      })),
+      takeUntilDestroyed(this.destroyRef))
+      .subscribe(event => {
+        console.log(
+          '[App Shell Update] Update available: current version is',
+          event.current,
+          'available version is',
+          event.available
+        );
+        this.snackBar.open(
+          'Newer version of the app is available.',
+          'Refresh the page'
+        ).onAction()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => {
+            this.activateUpdate();
+          });
+      });
   }
 
   activateUpdate() {
-    this.snackBar.open('To be implemented','close',{ duration: 2000 });
     console.log('[App Shell Update] activateUpdate started');
-    // Code to activate the update
+    this.swUpdate
+      .activateUpdate()
+      .then(() => {
+        console.log('[App Shell Update] activateUpdate completed');
+        this.window.location.reload();
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   checkForUpdate() {
-    this.snackBar.open('To be implemented', 'close', { duration: 2000 });
     console.log('[App Shell Update] checkForUpdate started');
-    // Code to explicitly check for the updates
+    this.swUpdate
+      .checkForUpdate()
+      .then(() => {
+        console.log('[App Shell Update] checkForUpdate completed');
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   openLog() {
-    window.open('/ngsw/state');
+    this.window.open('/ngsw/state');
   }
 }
