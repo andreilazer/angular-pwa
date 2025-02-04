@@ -66,5 +66,9 @@
         "strategy": "freshness"
       }
     }
-  ]
+  ],
+  "appData": {
+    "version": "2.0",
+    "message": "This changes everything!!"
+  }
 }

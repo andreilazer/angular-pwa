@@ -24,8 +24,9 @@ export class UpdateService {
         'available version is',
         event.available
       );
+      let appData = event.available.appData as { version: string, message: string } || { version: '1.0', message: 'We are live!' };
       this.snackBar.open(
-        'Newer version of the app is available.',
+        `Newer version of the app is available. ${appData.version}: ${appData.message}`,
         'Refresh the page'
       ).onAction()
         .subscribe(() => {
