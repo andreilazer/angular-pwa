@@ -73,5 +73,9 @@
     "!/**/*__*",
     "!/**/*__*/**",
     "!/**/non-cached-route"
-  ]
+  ],
+  "appData": {
+    "version": "2.0",
+    "message": "This changes everything!!"
+  }
 }
